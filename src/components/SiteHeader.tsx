@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
@@ -11,6 +11,12 @@ const links = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  const isActive = (path: string) => {
+    if (path === "/") return location.pathname === "/";
+    return location.pathname.startsWith(path);
+  };
 
   return (
     <header className="absolute top-0 left-0 right-0 z-50">
@@ -25,10 +31,9 @@ export function SiteHeader() {
             <Link
               key={l.to}
               to={l.to}
-              activeOptions={{ exact: true }}
-              activeProps={{ className: "text-gold" }}
-              inactiveProps={{ className: "text-ivory/80 hover:text-gold" }}
-              className="text-sm tracking-[0.15em] uppercase transition-colors"
+              className={`text-sm tracking-[0.15em] uppercase transition-colors ${
+                isActive(l.to) ? "text-gold" : "text-ivory/80 hover:text-gold"
+              }`}
             >
               {l.label}
             </Link>
